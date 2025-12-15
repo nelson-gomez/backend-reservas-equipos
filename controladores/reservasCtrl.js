@@ -13,6 +13,16 @@ const crearReserva = async (req, res) => {
       return res.status(400).json({ mensaje: 'equipoId y fechaReserva son requeridos' });
     }
 
+    // Validación: Verificar que la fecha no sea en el pasado
+    const fechaSeleccionada = new Date(fechaReserva);
+    fechaSeleccionada.setHours(0, 0, 0, 0);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+
+    if (fechaSeleccionada < hoy) {
+      return res.status(400).json({ mensaje: 'No se pueden realizar reservas en fechas pasadas. Por favor selecciona una fecha actual o futura.' });
+    }
+
     // Verificar que el equipo existe
     const equipo = await Equipo.findByPk(equipoId);
     if (!equipo) {
