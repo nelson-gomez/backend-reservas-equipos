@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: backend-reservas-equipos
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node app.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_HOST
+        fromDatabase:
+          name: mysql-reservas
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: mysql-reservas
+          property: port
+      - key: DB_USER
+        fromDatabase:
+          name: mysql-reservas
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: mysql-reservas
+          property: password
+      - key: DB_NAME
+        value: reservas_equipos
+      - key: JWT_SECRET
+        sync: false
+      - key: PORT
+        value: "3000"
+
+databases:
+  - name: mysql-reservas
+    databaseName: reservas_equipos
+    user: admin
+    plan: free
